@@ -48,7 +48,7 @@ contract Raffle {
         i_interval = interval;
         s_lastTimeStamp = block.timestamp;
     }
-    
+
     function enterRaffle() external payable {
         // Enter the raffle
         // require(msg.value >= i_entranceFee, "Not enough ETH sent!");
