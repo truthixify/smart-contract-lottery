@@ -81,6 +81,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
         s_raffleState = RaffleState.OPEN;
     }
 
+    /*//////////////////////////////////////////////////////////////
+                              ENTER RAFFLE
+    //////////////////////////////////////////////////////////////*/
     function enterRaffle() external payable {
         // Enter the raffle
         // require(msg.value >= i_entranceFee, "Not enough ETH sent!");
@@ -98,6 +101,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
         emit RaffleEntered(msg.sender);
     }
 
+    /*//////////////////////////////////////////////////////////////
+                              CHECK UPKEEP
+    //////////////////////////////////////////////////////////////*/
     // When should winner be picked
     /**
      * @dev This is the function that the Chainlink Keeper nodes call
@@ -126,6 +132,9 @@ contract Raffle is VRFConsumerBaseV2Plus {
         upkeepNeeded = (isOpen && timeHasPassed && hasPlayers && hasBalance);
     }
 
+    /*//////////////////////////////////////////////////////////////
+                              PERFORM UPKEEP
+    //////////////////////////////////////////////////////////////*/
     function performUpKeep() external {
         // Check to see if enough time has passed
         // require(block.timestamp - s_lastTimeStamp > i_interval, "Not enough time has passed!");
@@ -177,5 +186,17 @@ contract Raffle is VRFConsumerBaseV2Plus {
      */
     function getEntranceFee() external view returns (uint256) {
         return i_entranceFee;
+    }
+
+    function getRaffleState() external view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getPlayers() external view returns (address payable[] memory) {
+        return s_players;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns (address) {
+        return s_players[indexOfPlayer];
     }
 }
