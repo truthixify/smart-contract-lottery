@@ -62,6 +62,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     /* Evemts */
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestedRaffleWinner(uint256 indexed requestId);
 
     constructor(
         uint256 entranceFee,
@@ -159,9 +160,11 @@ contract Raffle is VRFConsumerBaseV2Plus {
                 )
             })
         );
+
+        emit RequestedRaffleWinner(requestId);
     }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
+    function fulfillRandomWords(uint256 /* requestId */, uint256[] calldata randomWords) internal override {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable recentWinner = s_players[indexOfWinner];
 
@@ -184,19 +187,39 @@ contract Raffle is VRFConsumerBaseV2Plus {
      * @notice Get the entrance fee
      * @return The entrance fee
      */
-    function getEntranceFee() external view returns (uint256) {
-        return i_entranceFee;
-    }
-
-    function getRaffleState() external view returns (RaffleState) {
+    function getRaffleState() public view returns (RaffleState) {
         return s_raffleState;
     }
 
-    function getPlayers() external view returns (address payable[] memory) {
-        return s_players;
+    function getNumWords() public pure returns (uint256) {
+        return NUM_WORDS;
     }
 
-    function getPlayer(uint256 indexOfPlayer) external view returns (address) {
-        return s_players[indexOfPlayer];
+    function getRequestConfirmations() public pure returns (uint256) {
+        return REQUEST_CONFIRMATIONS;
+    }
+
+    function getRecentWinner() public view returns (address) {
+        return s_recentWinner;
+    }
+
+    function getPlayer(uint256 index) public view returns (address) {
+        return s_players[index];
+    }
+
+    function getLastTimeStamp() public view returns (uint256) {
+        return s_lastTimeStamp;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
+    }
+
+    function getEntranceFee() public view returns (uint256) {
+        return i_entranceFee;
+    }
+
+    function getNumberOfPlayers() public view returns (uint256) {
+        return s_players.length;
     }
 }
