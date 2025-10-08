@@ -26,7 +26,7 @@ contract RaffleTest is Test, CodeConstants {
     uint256 public constant STARTING_PLAYER_BALANCE = 10 ether;
     uint256 public constant LINK_BALANCE = 100 ether;
 
-    /* Evemts */
+    /* Events */
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
 
